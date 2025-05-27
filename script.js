@@ -1,6 +1,7 @@
 import { Tetris } from "./tetris.js";
 import { convertPositionToIndex, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, SAD } from "./utilities.js";
 
+var is_touch_device = 'ontouchstart' in document.documentElement;
 let hammer;
 let requestId;
 let timeoutId;
@@ -8,7 +9,9 @@ const tetris = new Tetris();
 const cells = document.querySelectorAll('.grid>div');
 
 initKeydown();
-initTouch();
+if(is_touch_device){
+    initTouch();
+}
 
 moveDown();
 
@@ -203,3 +206,11 @@ function drawSad() {
         }
     }
 }
+
+
+const btns = document.querySelectorAll(".btn");
+btns.forEach((btn) => {
+    btn.addEventListener('click', function(e) {
+        e.target.classList.toggle("ico")
+    })
+})

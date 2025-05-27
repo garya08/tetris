@@ -15,6 +15,11 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     user-select: none;
 }
+.wrapper {
+    display: flex;
+    gap: 3vh;
+    align-items: flex-start;
+}
 
 .grid {
     display: grid;
@@ -92,4 +97,62 @@ body {
     90% {
         transform: scale(1) rotate(0);
     }
+}
+
+
+.panel {
+    background-color: rgba(1, 8, 89, 0.5);
+    border-radius: 0.6vh;
+    padding: 0.6vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1vh;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+}
+.panel h2,span {
+    font-size: 3vh;
+}
+.score {
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+}
+.currentBlock {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-template-rows: repeat(4, auto);
+    padding: 0.6vh;
+    gap: 0.3vh;
+    border-radius: 0.6vh;
+}
+.currentBlock>div {
+    --cell-size: min(4.5vh, 7.5vw);
+    height: var(--cell-size);
+    width: var(--cell-size);
+    border-radius: 0.3vh;
+    background-color: rgba(126, 150, 221, 0.2);
+}
+
+
+
+
+.btn.ico>.ico2,
+.btn>.ico1 {
+    display: block;
+}
+.btn.ico>.ico1,
+.btn>.ico2 {
+    display: none;
+}
+svg {
+    pointer-events: none;
+    fill: #fff;
+}
+.btn {
+    background-color: transparent;
+    border: none;
+    width: 6vh;
 }
