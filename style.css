@@ -41,7 +41,7 @@ body {
 
 .grid>div,
 .currentBlock>div {
-    --cell-size: min(4.5vh, 7vw);
+    --cell-size: min(4.5vh, 6vw);
     height: var(--cell-size);
     width: var(--cell-size);
     border-radius: 0.3vh;
