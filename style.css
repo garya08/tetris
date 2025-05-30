@@ -7,6 +7,7 @@
 }
 
 body {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,6 +16,9 @@ body {
     background: linear-gradient(90deg, #395492, #0099c0, #3dd5a8);
     font-family: Arial, Helvetica, sans-serif;
     user-select: none;
+}
+body:has(dialog[open]) {
+    overflow: hidden;
 }
 .wrapper {
     display: flex;
@@ -53,25 +57,32 @@ body {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-.grid>div.I {
+.grid>div.I,
+.currentBlock>div.I {
     background-color: #6be1ec;
 }
-.grid>div.J {
+.grid>div.J,
+.currentBlock>div.J {
     background-color: #5eb0f3;
 }
-.grid>div.L {
+.grid>div.L,
+.currentBlock>div.L {
     background-color: #f2c35b;
 }
-.grid>div.O {
+.grid>div.O,
+.currentBlock>div.O {
     background-color: #f7e562;
 }
-.grid>div.S {
+.grid>div.S,
+.currentBlock>div.S {
     background-color: #7be17b;
 }
-.grid>div.Z {
+.grid>div.Z,
+.currentBlock>div.Z {
     background-color: #de5c6b;
 }
-.grid>div.T {
+.grid>div.T,
+.currentBlock>div.T {
     background-color: #b276f3;
 }
 
@@ -151,7 +162,14 @@ svg {
     border: none;
     width: min(6vh, 10vw);
 }
-
+.btn:active {
+    background-color: rgba(1, 8, 89, 0.5);
+    border-radius: 0.6vh;
+    transition: background-color 0.2s;
+}
+#mainTheme {
+    display: none;
+}
 
 @media (max-width: 768px) {
     .wrapper {
@@ -164,3 +182,63 @@ svg {
         font-size: 2vh;
     }
 }
+
+
+
+
+/* MODALS */
+
+dialog {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2vh;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    
+    background-color: rgba(1, 8, 89, 0.7);
+    color: #fff;
+    border-radius: 0.6vh;
+    border: none;
+    padding: 0.6vh;
+    width: 50vh;
+    height: 50vh;
+}
+.box {
+
+}
+dialog::backdrop {
+    position: fixed;
+    inset: 0px;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.gameOver button,
+.menu button {
+    background-color: rgba(126, 150, 221, 0.7);
+    color: #fff;
+    width: 50%;
+    height: 10%;
+    border: none;
+    border-radius: 0.6vh;
+    font-size: 3vh;
+    font-weight: 700;
+}
+.gameOver button:active,
+.menu button:active {
+    background-color: rgba(1, 8, 89, 0.5);
+    border-radius: 0.6vh;
+    transition: background-color 0.2s;
+}
+
+.gameOver h1,
+.menu h1 {
+    font-size: 7vh;
+}
+.menu span {
+    width: 50%;
+}
+/* .gameOver {
+    display: flex;
+} */

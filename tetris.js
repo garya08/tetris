@@ -3,18 +3,23 @@ import {
     PLAYFIELD_ROWS,
     TETROMINO_NAMES,
     TETROMINOES,
+    TETROMINOES_SCORE,
     getRandomElement,
-    rotateMatrix
+    rotateMatrix,
+    LEVELS,
 } from "./utilities.js";
 
 export class Tetris {
+    score = 0;
+    level = 0;
+    speed = 0;
     constructor() {
         this.playfield;
         this.tetromino;
         this.isGameOver = false;
         this.init();
     }
-
+    
     init() {
         this.generatePlayfield();
         this.generateTetromino();
@@ -87,6 +92,8 @@ export class Tetris {
     dropTetrominoDown() {
         this.tetromino.row = this.tetromino.ghostRow;
         this.placeTetromino();
+        
+        this.score += TETROMINOES_SCORE[this.tetromino.name] + 50*this.level
     }
 
     isValid() {
@@ -152,6 +159,7 @@ export class Tetris {
     removeFilledRows(filledRows) {
         filledRows.forEach(row=> {
             this.dropRowsAbove(row);
+            this.score += 100 + 100*this.level;
         });
     }
 

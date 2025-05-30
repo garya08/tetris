@@ -1,5 +1,6 @@
 import { Tetris } from "./tetris.js";
-import { convertPositionToIndex, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, SAD } from "./utilities.js";
+import { convertPositionToIndex, convertCurrPos, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, SAD, LEVELS } from "./utilities.js";
+import { btnRestart, btnContinue, btnPause, audio, btnVolume, scoreEl, speedEl, levelEl } from "./index.js";
 
 var is_touch_device = 'ontouchstart' in document.documentElement;
 let hammer;
@@ -7,6 +8,7 @@ let requestId;
 let timeoutId;
 const tetris = new Tetris();
 const cells = document.querySelectorAll('.grid>div');
+const currCells = document.querySelectorAll('.currentBlock>div');
 
 initKeydown();
 if(is_touch_device){
@@ -126,7 +128,7 @@ function dropDown() {
 }
 
 function startLoop() {
-    timeoutId = setTimeout(() => requestId = requestAnimationFrame(moveDown), 700);
+    timeoutId = setTimeout(() => requestId = requestAnimationFrame(moveDown), 700 - 200*tetris.speed);
 }
 
 function stopLoop() {
@@ -141,6 +143,24 @@ function draw() {
     drawPlayField();
     drawTetromino();
     drawGhostTetromino();
+    drawCurrTetromino();
+    
+    scoreEl.textContent = tetris.score.toString().padStart(6, '0');
+    speedEl.textContent = tetris.speed.toString();
+    levelEl.textContent = tetris.level.toString();
+    checkScore();
+}
+
+function drawCurrTetromino() {
+    const name = tetris.tetromino.name;
+    const matrix = convertCurrPos(name);
+    const matrixSize = matrix.length;
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix.length; j++) {
+            currCells[i * matrixSize + j].removeAttribute('class');
+            if (matrix[i][j] > 0) currCells[i * matrixSize + j].classList.add(name);
+        }
+    }
 }
 
 function drawPlayField() {
@@ -182,8 +202,11 @@ function drawGhostTetromino() {
 function gameOver() {
     stopLoop();
     document.removeEventListener('keydown', onKeydown);
-    hammer.off('panstart panleft panright pandown swipedown tap')
+    if(is_touch_device){
+        hammer.off('panstart panleft panright pandown swipedown tap')
+    }
     gameOverAnimation();
+    showGameOverModal()
 }
 
 function gameOverAnimation() {
@@ -208,9 +231,57 @@ function drawSad() {
 }
 
 
-const btns = document.querySelectorAll(".btn");
-btns.forEach((btn) => {
-    btn.addEventListener('click', function(e) {
-        e.target.classList.toggle("ico")
-    })
+
+// INDEX.JS
+btnRestart.addEventListener('click', function(e) {
+    e.target.parentNode.style.display = "none";
+    e.target.parentNode.close();
+    startLoop();
+    draw();
 })
+btnContinue.addEventListener('click', function(e) {
+    e.target.parentNode.style.display = "none";
+    e.target.parentNode.close();
+    startLoop();
+    btnVolume.classList.contains('ico') ? audio.pause() : audio.play();
+})
+btnPause.addEventListener('click', function(e) {
+    btnContinue.parentNode.style.display = "flex";
+    btnContinue.parentNode.showModal();
+    stopLoop();
+    audio.pause();
+})
+function showGameOverModal() {
+    const parent = btnRestart.parentNode;
+    parent.style.display = "flex";
+    parent.showModal();
+    parent.querySelector('span').textContent = tetris.score.toString().padStart(6, '0');
+}
+function checkScore() {
+    const speedsLevel = {
+        0: 0,
+        1: 0,
+        2: 0,
+        3: 1,
+        4: 1,
+        5: 1,
+        6: 2,
+        7: 2,
+        8: 2,
+        9: 3,
+        10: 3
+    }
+    if (tetris.score > LEVELS[0]) tetris.level = 0;
+    if (tetris.score > LEVELS[1]) tetris.level = 1;
+    if (tetris.score > LEVELS[2]) tetris.level = 2;
+    if (tetris.score > LEVELS[3]) tetris.level = 3;
+    if (tetris.score > LEVELS[4]) tetris.level = 4;
+    if (tetris.score > LEVELS[5]) tetris.level = 5;
+    if (tetris.score > LEVELS[6]) tetris.level = 6;
+    if (tetris.score > LEVELS[7]) tetris.level = 7;
+    if (tetris.score > LEVELS[8]) tetris.level = 8;
+    if (tetris.score > LEVELS[9]) tetris.level = 9;
+    if (tetris.score > LEVELS[10]) tetris.level = 10;
+
+    tetris.speed = speedsLevel[tetris.level]
+}
